@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedTech Portal | Student Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --accent: #14b8a6;
+            --bg-light: #f0f9ff;
+            --glass: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body {
+            background-color: var(--bg-light);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .floating-symbol {
+            position: absolute; color: var(--primary); opacity: 0.05; z-index: 0;
+            animation: floatSymbol 10s infinite ease-in-out;
+        }
+        @keyframes floatSymbol {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+        .login-card {
+            display: flex; width: 850px; max-width: 90%; height: 550px;
+            background: var(--glass); backdrop-filter: blur(20px);
+            border-radius: 24px; border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(2, 132, 199, 0.1), 0 0 0 1px rgba(255,255,255,0.5) inset;
+            overflow: hidden; position: relative; z-index: 10;
+            animation: cardEntrance 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .visual-side {
+            flex: 1; background: linear-gradient(135deg, var(--primary), var(--accent));
+            padding: 50px 40px; display: flex; flex-direction: column; justify-content: space-between;
+            color: white; position: relative; overflow: hidden;
+        }
+        .visual-side::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px; opacity: 0.5;
+        }
+        .logo-area { z-index: 2; display: flex; align-items: center; gap: 12px; }
+        .logo-icon { font-size: 1.8rem; background: white; color: var(--primary); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .ecg-container { position: relative; width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; z-index: 2; }
+        .ecg-line { width: 80%; height: 60px; stroke: white; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawECG 2s linear infinite; }
+        @keyframes drawECG { 0% { stroke-dashoffset: 1000; } 100% { stroke-dashoffset: 0; } }
+        .visual-footer p { z-index: 2; font-size: 0.9rem; opacity: 0.9; display: flex; align-items: center; gap: 8px; }
+        .form-side { flex: 1.2; padding: 50px; display: flex; flex-direction: column; justify-content: center; background: white; }
+        .form-header { margin-bottom: 35px; text-align: center; }
+        .form-header h2 { font-size: 1.8rem; color: var(--text-main); margin-bottom: 8px; }
+        .form-header p { color: var(--text-muted); font-size: 0.95rem; }
+        .input-wrapper { position: relative; margin-bottom: 20px; }
+        .input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.1rem; transition: all 0.3s ease; }
+        .med-input { width: 100%; padding: 14px 14px 14px 48px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; color: var(--text-main); transition: all 0.3s ease; background: #f8fafc; }
+        .med-input:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1); }
+        .med-input:focus + .input-icon { color: var(--accent); transform: translateY(-50%) scale(1.2); }
+        .btn-med { width: 100%; padding: 15px; margin-top: 10px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.1s, box-shadow 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-med:hover { box-shadow: 0 10px 20px -5px rgba(2, 132, 199, 0.4); transform: translateY(-2px); }
+        .btn-med:active { transform: scale(0.98); }
+        .btn-med::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-20deg); transition: 0.5s; }
+        .btn-med:hover::after { animation: scanEffect 1.5s infinite; }
+        @keyframes scanEffect { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
+        #result { margin-top: 20px; padding: 12px; border-radius: 8px; font-size: 0.9rem; text-align: center; display: none; animation: fadeIn 0.3s ease; }
+        .success { background: #ecfdf5; color: #047857; border: 1px solid #6ee7b7; }
+        .error { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+        .spinner-med { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; display: none; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 800px) { .login-card { flex-direction: column; height: auto; margin: 20px; } .visual-side { padding: 30px; min-height: 180px; } .form-side { padding: 30px; } .ecg-container { display: none; } }
+    </style>
+</head>
+<body>
+    <i class="fa-solid fa-plus floating-symbol" style="top: 10%; left: 10%; font-size: 2rem; animation-delay: 0s;"></i>
+    <i class="fa-solid fa-heart-pulse floating-symbol" style="top: 15%; right: 15%; font-size: 3rem; animation-delay: 2s;"></i>
+    <i class="fa-solid fa-stethoscope floating-symbol" style="bottom: 20%; left: 15%; font-size: 2.5rem; animation-delay: 4s;"></i>
+    <i class="fa-solid fa-dna floating-symbol" style="bottom: 10%; right: 10%; font-size: 4rem; animation-delay: 1s;"></i>
+
+    <div class="login-card">
+        <div class="visual-side">
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                <span style="font-weight: 700; letter-spacing: 1px;">MEDTECH</span>
+            </div>
+            <div class="ecg-container">
+                <svg class="ecg-line" viewBox="0 0 500 150">
+                    <path d="M0,75 L100,75 L120,75 L140,40 L160,110 L180,20 L200,130 L220,75 L250,75 L350,75 L370,75 L390,40 L410,110 L430,75 L500,75" />
+                </svg>
+            </div>
+            <div class="visual-footer">
+                <p><i class="fa-solid fa-shield-heart"></i> Secure & HIPAA Compliant</p>
+            </div>
+        </div>
+
+        <div class="form-side">
+            <div class="form-header">
+                <h2>Student Access</h2>
+                <p>Enter your credentials to view records.</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="input-wrapper">
+                    <input type="text" id="regno" class="med-input" placeholder="Registration Number" required autocomplete="off">
+                    <i class="fa-solid fa-id-card input-icon"></i>
+                </div>
+                <div class="input-wrapper">
+                    <input type="text" id="name" class="med-input" placeholder="Full Name" required autocomplete="off">
+                    <i class="fa-solid fa-user input-icon"></i>
+                </div>
+                <div class="input-wrapper">
+                    <input type="password" id="password" class="med-input" placeholder="Password" required>
+                    <i class="fa-solid fa-lock input-icon"></i>
+                </div>
+                <button type="submit" class="btn-med" id="loginBtn">
+                    <span class="btn-text">Verify Identity</span>
+                    <div class="spinner-med"></div>
+                </button>
+            </form>
+            <p id="result"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
